@@ -1,8 +1,13 @@
 package com.demo.day_one.Entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class SearchObject {
 	
-	public int pageSize;
-	public int pageNumber;
-	public String key;
+	private int pageSize;
+	private int pageNumber;
+	private String key;
 }

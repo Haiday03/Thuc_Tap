@@ -10,12 +10,12 @@ import lombok.Setter;
 @Setter
 public class SearchRequest {
 	
-    public String name;
-    public Date birthDateStart;
-    public Date birthDateEnd;
-    public String numberPhone;
-    public String address;
-    public String email;
-    public String description;
-    public float gpa;
+    private String name;
+    private Date birthDateStart;
+    private Date birthDateEnd;
+    private String numberPhone;
+    private String address;
+    private String email;
+    private String description;
+    private float gpa;
 }

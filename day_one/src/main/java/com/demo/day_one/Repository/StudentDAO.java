@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 
 import com.demo.day_one.DTO.SearchRequest;
-import com.demo.day_one.Entity.Student;
+import com.demo.day_one.Entity.*;
 
 public interface StudentDAO {
 

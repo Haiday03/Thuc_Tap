@@ -32,7 +32,6 @@ import com.demo.day_one.Service.StudentService;
 import ch.qos.logback.classic.Logger;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/student")
 public class StudentController {
@@ -99,7 +98,7 @@ public class StudentController {
 	
 	@GetMapping("/paging-student/{point}")
 	public ResponseEntity<Set<StudentDTO>> pagingStudentByPoint(@PathVariable("point")float point, @RequestBody SearchObject sealedObject){
-		Set<StudentDTO> res = studentService.pagingStudentByGPA(point, PageRequest.of(sealedObject.pageNumber, sealedObject.pageSize));
+		Set<StudentDTO> res = studentService.pagingStudentByGPA(point, PageRequest.of(sealedObject.getPageNumber(), sealedObject.getPageSize()));
 		
 		if(res.isEmpty() || res == null)
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -112,6 +111,7 @@ public class StudentController {
 														@RequestParam("pageSize")int pageSize){
 		//Set<StudentDTO> res = studentDynamicServices.findByCriteria(searchRequest, PageRequest.of(pageNumber, pageSize));
 		Set<StudentDTO> res = studentService.findCriteria(searchRequest, PageRequest.of(pageNumber, pageSize));
+
 		if(res == null || res.isEmpty())
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Set<StudentDTO>>(res, HttpStatus.OK);
