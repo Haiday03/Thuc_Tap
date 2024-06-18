@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 
+import com.demo.day_one.DTO.SearchRequest;
 import com.demo.day_one.DTO.StudentDTO;
 import com.demo.day_one.Entity.Student;
 
@@ -26,4 +27,5 @@ public interface StudentService {
 	
 	public Set<StudentDTO> pagingStudentByGPA(float point, Pageable pageable);
 	
+	public Set<StudentDTO> findCriteria(SearchRequest searchRequest, Pageable pageable);
 }

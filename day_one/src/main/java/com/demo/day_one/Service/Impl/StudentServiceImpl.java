@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.demo.day_one.DTO.SearchRequest;
 import com.demo.day_one.DTO.StudentDTO;
 import com.demo.day_one.Entity.Student;
+import com.demo.day_one.Repository.StudentDAO;
 import com.demo.day_one.Repository.StudentRepository;
 import com.demo.day_one.Service.StudentService;
 
@@ -21,6 +23,10 @@ public class StudentServiceImpl implements StudentService{
 	
 	@Autowired
 	private StudentRepository studentRepository;
+	
+	//use JPA Entity Management
+	@Autowired
+	private StudentDAO studentDAO;
 
 	@Override
 	public Set<StudentDTO> getAllStudent() {
@@ -100,6 +106,14 @@ public class StudentServiceImpl implements StudentService{
 		Set<StudentDTO> res = new HashSet<>();
 		li.stream().map(StudentDTO::new).forEach(res::add);
 		return res.isEmpty() ? null : res; 
+	}
+
+
+	@Override
+	public Set<StudentDTO> findCriteria(SearchRequest searchRequest, Pageable pageable) {
+		// TODO Auto-generated method stub
+		List<Student> li = studentDAO.findAllByCriteria(searchRequest, pageable);
+		return li.stream().map(StudentDTO::new).collect(Collectors.toSet());
 	}
 
 }
