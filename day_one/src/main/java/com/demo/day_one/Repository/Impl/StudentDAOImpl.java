@@ -23,24 +23,92 @@ public class StudentDAOImpl implements StudentDAO{
 	
 	@Override
 	public List<Student> findAllByCriteria(SearchRequest searchRequest, Pageable pageable) {
-	    String jpql = "SELECT s FROM Student s WHERE "
-	            + "s.address LIKE :address "
-	            + "AND s.description LIKE :description "
-	            + "AND s.email LIKE :email "
-	            + "AND s.name LIKE :name "
-	            + "AND s.numberPhone LIKE :numberPhone "
-	            + "AND s.birthDate BETWEEN :birthDateStart AND :birthDateEnd "
-	            + "AND s.gpa >= :gpa";
+		StringBuilder jpql = new StringBuilder();
+		jpql.append("SELECT s FROM Student s ");
+		
+		if(searchRequest != null)
+			jpql.append("WHERE ");
+		
+		boolean test = false;
+		
+		if(searchRequest.address != null && !searchRequest.address.isBlank()) {
+			jpql.append("s.address LIKE :address ");
+			test = true;
+		}
+		
+		if(searchRequest.description != null && !searchRequest.description.isBlank()) {
+			if(test)
+				jpql.append("AND ");
+			jpql.append("s.description LIKE :description ");
+			test = true;
+		}
+		
+		if(searchRequest.email != null && !searchRequest.email.isBlank()) {
+			if(test)
+				jpql.append("AND ");
+			jpql.append("s.email LIKE :email ");
+			test = true;
+		}
+		
+		if(searchRequest.name != null && !searchRequest.name.isBlank()) {
+			if(test)
+				jpql.append("AND ");
+			jpql.append("s.name LIKE :name ");
+			test = true;
+		}
+		
+		if(searchRequest.numberPhone != null && !searchRequest.numberPhone.isBlank()) {
+			if(test)
+				jpql.append("AND ");
+			jpql.append("s.numberPhone LIKE :numberPhone ");
+			test = true;
+		}
+		
+		if(searchRequest.numberPhone != null && !searchRequest.numberPhone.isBlank()) {
+			if(test)
+				jpql.append("AND ");
+			jpql.append("s.numberPhone LIKE :numberPhone ");
+			test = true;
+		}
+		
+		if(searchRequest.birthDateStart != null && searchRequest.birthDateEnd != null) {
+			if(test)
+				jpql.append("AND ");
+			jpql.append("s.birthDate BETWEEN :birthDateStart AND :birthDateEnd ");
+			test = true;
+		}
+		
+		if(searchRequest.gpa != 0) {
+			if(test)
+				jpql.append("AND ");
+			jpql.append("s.gpa >= :gpa");
+		}
+		
 
-	    TypedQuery<Student> query = entityManager.createQuery(jpql, Student.class);
-	    query.setParameter("address", "%" + searchRequest.address + "%");
-	    query.setParameter("description", "%" + searchRequest.description + "%");
-	    query.setParameter("email", "%" + searchRequest.email + "%");
-	    query.setParameter("name", "%" + searchRequest.name + "%");
-	    query.setParameter("numberPhone", "%" + searchRequest.numberPhone + "%");
-	    query.setParameter("birthDateStart", searchRequest.birthDateStart);
-	    query.setParameter("birthDateEnd", searchRequest.birthDateEnd);
-	    query.setParameter("gpa", searchRequest.gpa);
+	    TypedQuery<Student> query = entityManager.createQuery(jpql.toString().trim(), Student.class);
+	    
+		if(searchRequest.address != null && !searchRequest.address.isBlank())
+			query.setParameter("address", "%" + searchRequest.address + "%");
+		
+		if(searchRequest.description != null && !searchRequest.description.isBlank())
+		    query.setParameter("description", "%" + searchRequest.description + "%");
+		    
+		if(searchRequest.email != null && !searchRequest.email.isBlank())
+		    query.setParameter("email", "%" + searchRequest.email + "%");
+		    
+		if(searchRequest.name != null && !searchRequest.name.isBlank())
+		    query.setParameter("name", "%" + searchRequest.name + "%");
+		    
+		if(searchRequest.numberPhone != null && !searchRequest.numberPhone.isBlank())
+		    query.setParameter("numberPhone", "%" + searchRequest.numberPhone + "%");
+		    
+		if(searchRequest.birthDateStart != null && searchRequest.birthDateEnd != null) {				
+			query.setParameter("birthDateStart", searchRequest.birthDateStart);
+			query.setParameter("birthDateEnd", searchRequest.birthDateEnd);
+		}
+		    
+		if(searchRequest.gpa != 0)
+		    query.setParameter("gpa", searchRequest.gpa);
 
 	    return query.getResultList();
 	}
