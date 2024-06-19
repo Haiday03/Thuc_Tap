@@ -4,10 +4,12 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -112,8 +114,10 @@ public class StudentServiceImpl implements StudentService{
 	@Override
 	public Set<StudentDTO> findCriteria(SearchRequest searchRequest, Pageable pageable) {
 		// TODO Auto-generated method stub
-		List<Student> li = studentDAO.findAllByCriteria(searchRequest, pageable);
-		return li.stream().map(StudentDTO::new).collect(Collectors.toSet());
+		Page<Student> li = studentDAO.findAllByCriteria(searchRequest, pageable);
+		Set<StudentDTO> res = new TreeSet<StudentDTO>((s1, s2) -> s1.getId().compareTo(s2.getId()));
+		li.stream().map(StudentDTO::new).forEach(res::add);
+		return res;
 	}
 
 }

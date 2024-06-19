@@ -1,9 +1,13 @@
 package com.demo.day_one.Repository.Impl;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -14,25 +18,24 @@ import com.demo.day_one.Repository.StudentDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
 @Repository
+@Transactional
 public class StudentDAOImpl implements StudentDAO{
 
 	@Autowired
 	private EntityManager entityManager;
 
 	@Override
-	public List<Student> findAllByCriteria(SearchRequest searchRequest, Pageable pageable) {
+	public org.springframework.data.domain.Page<Student> findAllByCriteria(SearchRequest searchRequest, Pageable pageable) {
 	    StringBuilder jpql = new StringBuilder();
-	    jpql.append("SELECT s FROM Student s ");
-	    
-	    if (searchRequest != null)
-	        jpql.append("WHERE ");
+	    jpql.append("SELECT s FROM Student s WHERE 1 = 1 ");
 	    
 	    boolean test = false;
 	    
 	    if (searchRequest.getAddress() != null && !searchRequest.getAddress().isBlank()) {
-	        jpql.append("s.address LIKE :address ");
+	        jpql.append("AND s.address LIKE :address ");
 	        test = true;
 	    }
 	    
@@ -64,7 +67,7 @@ public class StudentDAOImpl implements StudentDAO{
 	        test = true;
 	    }
 	    
-	    if (searchRequest.getBirthDateStart() != null && searchRequest.getBirthDateEnd() != null) {
+	    if (searchRequest.getBirthDateStart() != null) {
 	        if (test)
 	            jpql.append("AND ");
 	        jpql.append("s.birthDate BETWEEN :birthDateStart AND :birthDateEnd ");
@@ -77,6 +80,8 @@ public class StudentDAOImpl implements StudentDAO{
 	        jpql.append("s.gpa >= :gpa");
 	    }
 	    
+	    jpql.append("ORDER BY s.id DESC");
+
 	    TypedQuery<Student> query = entityManager.createQuery(jpql.toString().trim(), Student.class);
 	    
 	    if (searchRequest.getAddress() != null && !searchRequest.getAddress().isBlank())
@@ -97,12 +102,24 @@ public class StudentDAOImpl implements StudentDAO{
 	    if (searchRequest.getBirthDateStart() != null && searchRequest.getBirthDateEnd() != null) {                
 	        query.setParameter("birthDateStart", searchRequest.getBirthDateStart());
 	        query.setParameter("birthDateEnd", searchRequest.getBirthDateEnd());
+	    }else if(searchRequest.getBirthDateStart() != null) {
+	        query.setParameter("birthDateStart", searchRequest.getBirthDateStart());
+	        query.setParameter("birthDateEnd", Date.valueOf(LocalDate.now()));
 	    }
 	    
 	    if (searchRequest.getGpa() != 0)
 	        query.setParameter("gpa", searchRequest.getGpa());
 	    
-	    return query.getResultList();
+	    int totalElements = query.getResultList().size();
+	    
+	    query.setFirstResult((int)pageable.getOffset());
+	    query.setMaxResults(pageable.getPageSize());
+	    
+	    List<Student> li = query.getResultList();
+	    
+	    org.springframework.data.domain.Page<Student> page = new PageImpl<Student>(li, pageable, totalElements);
+	    
+	    return page;
 	}
 
 
