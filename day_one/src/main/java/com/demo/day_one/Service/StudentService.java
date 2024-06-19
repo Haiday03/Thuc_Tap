@@ -28,4 +28,6 @@ public interface StudentService {
 	public Set<StudentDTO> pagingStudentByGPA(float point, Pageable pageable);
 	
 	public Set<StudentDTO> findCriteria(SearchRequest searchRequest, Pageable pageable);
+	
+	public Set<StudentDTO> findCriteriaByProceduce(SearchRequest searchRequest, Pageable pageable);
 }

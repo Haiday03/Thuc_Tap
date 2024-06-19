@@ -7,10 +7,13 @@ import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.demo.day_one.Entity.Student;
+
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, UUID>{
@@ -24,4 +27,8 @@ public interface StudentRepository extends JpaRepository<Student, UUID>{
 	
 	@Query("SELECT s FROM Student s WHERE s.gpa >= :point")
 	public List<Student> pagingStudentByGPA(@Param("point")float point, Pageable pageable);
+	
+	@Procedure(procedureName = "find_criteria")
+	@Transactional
+	public List<Student> findCriteria(@Param("str_condition")String strCondition, @Param("page_size")int pageSize, @Param("page_number")int pageNumber);
 }
