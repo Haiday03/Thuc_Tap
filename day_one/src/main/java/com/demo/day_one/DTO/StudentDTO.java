@@ -22,7 +22,8 @@ public class StudentDTO implements Serializable {
     private String description;
     private float gpa;
     private GenderDTO gender;
-
+    private ClassRoomDTO classRoomDTO;
+    
     public StudentDTO(Student s) {
         this.id = s.getId();
         this.name = s.getName();
@@ -34,6 +35,8 @@ public class StudentDTO implements Serializable {
         this.gpa = s.getGpa();
         if (s.getGender() != null)
             this.gender = new GenderDTO(s.getGender());
+        if(s.getClassroom() != null)
+        	this.classRoomDTO = new ClassRoomDTO(s.getClassroom());
     }
 
 }

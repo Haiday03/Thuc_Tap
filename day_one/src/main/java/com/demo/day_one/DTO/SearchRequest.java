@@ -2,7 +2,6 @@ package com.demo.day_one.DTO;
 
 import java.sql.Date;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +17,5 @@ public class SearchRequest {
     private String email;
     private String description;
     private float gpa;
+    private String className;
 }

@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,6 +45,10 @@ public class Student implements Serializable {
     
     @Enumerated(EnumType.STRING) // Ánh xạ enum dưới dạng chuỗi
     private Gender gender;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "classroom_id")
+    @JsonIgnore
+    private ClassRoom classroom;
 
 }

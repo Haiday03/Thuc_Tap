@@ -110,8 +110,8 @@ public class StudentController {
 														@RequestParam("pageNumber")int pageNumber,
 														@RequestParam("pageSize")int pageSize){
 		//Set<StudentDTO> res = studentDynamicServices.findByCriteria(searchRequest, PageRequest.of(pageNumber, pageSize));
-		//Set<StudentDTO> res = studentService.findCriteria(searchRequest, PageRequest.of(pageNumber, pageSize));
-		Set<StudentDTO> res = studentService.findCriteriaByProceduce(searchRequest, PageRequest.of(pageNumber, pageSize));
+		Set<StudentDTO> res = studentService.findCriteria(searchRequest, PageRequest.of(pageNumber, pageSize));
+		//Set<StudentDTO> res = studentService.findCriteriaByProceduce(searchRequest, PageRequest.of(pageNumber, pageSize));
 		if(res == null || res.isEmpty())
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Set<StudentDTO>>(res, HttpStatus.OK);

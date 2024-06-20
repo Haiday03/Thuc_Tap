@@ -31,53 +31,39 @@ public class StudentDAOImpl implements StudentDAO{
 	public org.springframework.data.domain.Page<Student> findAllByCriteria(SearchRequest searchRequest, Pageable pageable) {
 	    StringBuilder jpql = new StringBuilder();
 	    jpql.append("SELECT s FROM Student s WHERE 1 = 1 ");
-	    
-	    boolean test = false;
-	    
+	    	    
 	    if (searchRequest.getAddress() != null && !searchRequest.getAddress().isBlank()) {
 	        jpql.append("AND s.address LIKE :address ");
-	        test = true;
 	    }
 	    
 	    if (searchRequest.getDescription() != null && !searchRequest.getDescription().isBlank()) {
-	        if (test)
-	            jpql.append("AND ");
-	        jpql.append("s.description LIKE :description ");
-	        test = true;
+	        jpql.append("AND s.description LIKE :description ");
 	    }
 	    
 	    if (searchRequest.getEmail() != null && !searchRequest.getEmail().isBlank()) {
-	        if (test)
-	            jpql.append("AND ");
-	        jpql.append("s.email LIKE :email ");
-	        test = true;
+	        jpql.append("AND s.email LIKE :email ");
 	    }
 	    
 	    if (searchRequest.getName() != null && !searchRequest.getName().isBlank()) {
-	        if (test)
-	            jpql.append("AND ");
-	        jpql.append("s.name LIKE :name ");
-	        test = true;
+	        jpql.append("AND s.name LIKE :name ");
 	    }
 	    
 	    if (searchRequest.getNumberPhone() != null && !searchRequest.getNumberPhone().isBlank()) {
-	        if (test)
-	            jpql.append("AND ");
-	        jpql.append("s.numberPhone LIKE :numberPhone ");
-	        test = true;
+	        jpql.append("AND s.numberPhone LIKE :numberPhone ");
 	    }
 	    
 	    if (searchRequest.getBirthDateStart() != null) {
-	        if (test)
-	            jpql.append("AND ");
-	        jpql.append("s.birthDate BETWEEN :birthDateStart AND :birthDateEnd ");
-	        test = true;
+	        jpql.append("AND s.birthDate BETWEEN :birthDateStart AND :birthDateEnd ");
 	    }
 	    
 	    if (searchRequest.getGpa() != 0) {
-	        if (test)
 	            jpql.append("AND ");
-	        jpql.append("s.gpa >= :gpa");
+	        jpql.append("s.gpa >= :gpa ");
+	    }
+	    
+	    if(searchRequest.getClassName() != null && !searchRequest.getClassName().isBlank())
+	    {
+	    	jpql.append("AND s.classroom is not null AND s.classroom.className LIKE :classroom ");
 	    }
 	    
 	    jpql.append("ORDER BY s.id DESC");
@@ -109,6 +95,11 @@ public class StudentDAOImpl implements StudentDAO{
 	    
 	    if (searchRequest.getGpa() != 0)
 	        query.setParameter("gpa", searchRequest.getGpa());
+	    
+	    if(searchRequest.getClassName() != null && !searchRequest.getClassName().isBlank())
+	    {
+	    	query.setParameter("classroom", searchRequest.getClassName());
+	    }
 	    
 	    int totalElements = query.getResultList().size();
 	    
