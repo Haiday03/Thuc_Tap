@@ -2,6 +2,7 @@ package com.demo.day_one.DTO;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import com.demo.day_one.Entity.Student;
@@ -23,6 +24,7 @@ public class StudentDTO implements Serializable {
     private float gpa;
     private GenderDTO gender;
     private ClassRoomDTO classRoomDTO;
+    private Set<CourseDTO> coures;
     
     public StudentDTO(Student s) {
         this.id = s.getId();

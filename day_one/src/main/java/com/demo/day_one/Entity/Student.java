@@ -2,6 +2,7 @@ package com.demo.day_one.Entity;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -50,5 +51,12 @@ public class Student implements Serializable {
     @JoinColumn(name = "classroom_id")
     @JsonIgnore
     private ClassRoom classroom;
+    
+    @ManyToMany
+    @JoinTable(name = "student_course",
+    			joinColumns = @JoinColumn(name = "student_id"),
+    			inverseJoinColumns = @JoinColumn(name = "course_id")
+    			)
+    private Set<Course> coures;
 
 }
