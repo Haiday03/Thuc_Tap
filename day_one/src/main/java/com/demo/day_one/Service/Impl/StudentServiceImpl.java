@@ -20,6 +20,8 @@ import com.demo.day_one.Entity.Student;
 import com.demo.day_one.Repository.StudentDAO;
 import com.demo.day_one.Repository.StudentRepository;
 import com.demo.day_one.Service.StudentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
 
@@ -29,7 +31,9 @@ public class StudentServiceImpl implements StudentService{
 	@Autowired
 	private StudentRepository studentRepository;
 	
-	//use JPA Entity Management
+    @Autowired
+    private ObjectMapper objectMapper;
+
 	@Autowired
 	private StudentDAO studentDAO;
 
@@ -164,10 +168,33 @@ public class StudentServiceImpl implements StudentService{
 //			strCondition.append("AND number_phone = " + searchRequest.getNumberPhone() + " ");
 //        }
 //        
-//       List<Student> li = studentRepository.findCriteria(strCondition.toString(), pageable.getPageSize(), pageable.getPageNumber());
+		
+		String jsonStrCondition = "";
+        try {
+            jsonStrCondition = objectMapper.writeValueAsString(convert(searchRequest));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }	
+        
+        System.out.println(jsonStrCondition);
+        List<Student> li = studentRepository.findCriteria(jsonStrCondition, pageable.getPageSize(), pageable.getPageNumber());
 		Set<StudentDTO> res = new TreeSet<StudentDTO>((s1, s2) -> s1.getId().compareTo(s2.getId()));
-//		li.stream().map(StudentDTO::new).forEach(res::add);
+		li.stream().map(StudentDTO::new).forEach(res::add);
 		return res;
+	}
+	
+	public static SearchRequest convert(SearchRequest searchRequest) {
+		if(searchRequest.getName() == null)
+			searchRequest.setName("");
+		if(searchRequest.getAddress() == null)
+			searchRequest.setAddress("");
+		if(searchRequest.getDescription() == null)
+			searchRequest.setDescription("");
+		if(searchRequest.getEmail() == null)
+			searchRequest.setEmail("");
+		if(searchRequest.getNumberPhone() == null)
+			searchRequest.setNumberPhone("");
+		return searchRequest;
 	}
 
 }
