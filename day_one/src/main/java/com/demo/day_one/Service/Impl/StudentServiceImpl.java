@@ -14,9 +14,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.demo.day_one.DTO.CourseDTO;
 import com.demo.day_one.DTO.SearchRequest;
 import com.demo.day_one.DTO.StudentDTO;
+import com.demo.day_one.Entity.Course;
 import com.demo.day_one.Entity.Student;
+import com.demo.day_one.Repository.CourseRepository;
 import com.demo.day_one.Repository.StudentDAO;
 import com.demo.day_one.Repository.StudentRepository;
 import com.demo.day_one.Service.StudentService;
@@ -36,6 +39,9 @@ public class StudentServiceImpl implements StudentService{
 
 	@Autowired
 	private StudentDAO studentDAO;
+	
+	@Autowired
+	private CourseRepository courseRepository;
 
 	@Override
 	public Set<StudentDTO> getAllStudent() {
@@ -195,6 +201,36 @@ public class StudentServiceImpl implements StudentService{
 		if(searchRequest.getNumberPhone() == null)
 			searchRequest.setNumberPhone("");
 		return searchRequest;
+	}
+
+
+	@Override
+	@Transactional
+	public StudentDTO enrollCourse(UUID student_id, UUID course_id) {
+		// TODO Auto-generated method stub
+		Student st = studentRepository.findById(student_id).orElse(null);
+		Course cr  = courseRepository.findById(course_id).orElse(null);
+		
+		if(st == null || cr == null)
+			return null;
+		st.getCoures().add(cr);
+		studentRepository.save(st);
+		StudentDTO stDto = new StudentDTO(st);
+		stDto.setCoures(st.getCoures().stream().map(CourseDTO::new).collect(Collectors.toSet()));
+		
+		return stDto;
+	}
+
+
+	@Override
+	@Transactional
+	public Set<StudentDTO> findStudentsByCourse(UUID courseId) {
+		// TODO Auto-generated method stub
+		Course course = courseRepository.findById(courseId).orElse(null);
+		if(course == null || course.getStudents() == null)
+			return null;
+		
+		return course.getStudents().stream().map(StudentDTO::new).collect(Collectors.toSet());
 	}
 
 }

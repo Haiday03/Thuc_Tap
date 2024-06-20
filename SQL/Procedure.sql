@@ -18,7 +18,7 @@ BEGIN
     DECLARE class_name VARCHAR(100);
     DECLARE str_new VARCHAR(1000);
 
-    -- Gán giá trị từ JSON cho các biến, xử lý null bằng IFNULL
+
     SET name_st = JSON_UNQUOTE(JSON_EXTRACT(str_condition, '$.name'));
     SET number_phone = JSON_UNQUOTE(JSON_EXTRACT(str_condition, '$.numberPhone'));
     SET address = JSON_UNQUOTE(JSON_EXTRACT(str_condition, '$.address'));
@@ -31,7 +31,7 @@ BEGIN
                     NULL);
 
 
-    -- Kiểm tra giá trị trước khi gán
+    
     IF JSON_UNQUOTE(JSON_EXTRACT(str_condition, '$.birthDateStart')) IS NOT NULL 
        AND JSON_UNQUOTE(JSON_EXTRACT(str_condition, '$.birthDateStart')) != 'null' 
        AND JSON_UNQUOTE(JSON_EXTRACT(str_condition, '$.birthDateStart')) != '' THEN
@@ -48,13 +48,13 @@ BEGIN
         SET birth_date_end = NULL;
     END IF;
 
-    -- Tính toán chỉ số bắt đầu cho phân trang
+  
     SET start_index = (page_number - 1) * page_size;
 
-    -- Khởi tạo chuỗi truy vấn
+  
     SET str_new = '';
 
-    -- Kiểm tra và thêm điều kiện vào chuỗi truy vấn
+    
     IF name_st IS NOT NULL THEN
         SET str_new = CONCAT(str_new, ' AND name LIKE "%', name_st, '%"');
     END IF;
@@ -91,10 +91,10 @@ BEGIN
         SET str_new = CONCAT(str_new, ' AND classroom_id IN (SELECT id FROM tbl_class WHERE class_name LIKE "%', class_name, '%")');
     END IF;
 
-    -- Tạo câu lệnh SQL cuối cùng với các điều kiện đã được thêm
+    
     SET @sql_query = CONCAT('SELECT * FROM tbl_student WHERE 1=1', str_new, ' LIMIT ', start_index, ',', page_size);
 
-    -- Thực hiện truy vấn
+  
     PREPARE stmt FROM @sql_query;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;

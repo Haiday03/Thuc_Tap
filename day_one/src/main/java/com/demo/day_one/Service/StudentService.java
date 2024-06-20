@@ -30,4 +30,8 @@ public interface StudentService {
 	public Set<StudentDTO> findCriteria(SearchRequest searchRequest, Pageable pageable);
 	
 	public Set<StudentDTO> findCriteriaByProceduce(SearchRequest searchRequest, Pageable pageable);
+	
+	public StudentDTO enrollCourse(UUID student_id, UUID course_id);
+	
+	public Set<StudentDTO> findStudentsByCourse(UUID courseId);
 }

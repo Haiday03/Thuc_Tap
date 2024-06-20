@@ -117,4 +117,20 @@ public class StudentController {
 		return new ResponseEntity<Set<StudentDTO>>(res, HttpStatus.OK);
 	}
 	
+	@PutMapping("/enroll-course")
+	public ResponseEntity<StudentDTO> enrollCourse(@RequestParam("student_id")UUID student_id, @RequestParam("course_id")UUID course_id){
+		StudentDTO studentDTO = studentService.enrollCourse(student_id, course_id);
+		if(studentDTO == null)
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<StudentDTO>(studentDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping("/find-student-by-course/{id}")
+	public ResponseEntity<Set<StudentDTO>> findStudentsByCourse(@PathVariable("id")UUID courseId){
+		Set<StudentDTO> res = studentService.findStudentsByCourse(courseId);
+		if(res == null)
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Set<StudentDTO>>(res, HttpStatus.OK);
+	}
+	
 }
