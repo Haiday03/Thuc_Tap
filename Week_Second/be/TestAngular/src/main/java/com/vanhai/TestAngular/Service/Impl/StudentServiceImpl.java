@@ -1,7 +1,10 @@
 package com.vanhai.TestAngular.Service.Impl;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vanhai.TestAngular.DTO.SearchRequest;
 import com.vanhai.TestAngular.DTO.StudentDTO;
@@ -22,6 +26,8 @@ import com.vanhai.TestAngular.Service.StudentService;
 @Service
 public class StudentServiceImpl implements StudentService{
 
+	public static final String UPLOAD_DIR = "src/main/java/com/vanhai/TestAngular/Images";
+	
 	@Autowired
 	private StudentRepository studentRepository;
 	
@@ -94,6 +100,124 @@ public class StudentServiceImpl implements StudentService{
 			return false;
 		studentRepository.delete(oldStudent);
 		return true;
+	}
+	
+	private String saveFile(MultipartFile file) {
+		if(file.isEmpty())
+			throw new RuntimeException("Failed to store empty file");
+		
+		try {
+			java.nio.file.Path directory = Paths.get(UPLOAD_DIR);
+			if(!Files.exists(directory))
+				Files.createDirectories(directory);
+			
+			String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+			java.nio.file.Path destPath = directory.resolve(fileName);
+			file.transferTo(destPath);
+			
+			return  fileName;
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw new RuntimeException("Failed to store file", e);
+		}
+	}
+
+    public static boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        java.util.regex.Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+    
+	@Override
+	public StudentDTO save(String name, String email, String description, int age, String address, MultipartFile avatar,
+			UUID class_id) {
+		// TODO Auto-generated method stub
+		Student student = new Student();
+		
+		if(name != null && !name.trim().equals(""))
+		{
+			student.setName(name);
+		}
+		
+		if(email != null && isValidEmail(email))
+		{
+			student.setEmail(email);
+		}
+		
+		if(description != null && !description.trim().equals(""))
+		{
+			student.setDescription(description);
+		}
+		
+		if(age > 0)
+		{
+			student.setAge(age);
+		}
+		
+		if(address != null && !address.trim().equals(""))
+		{
+			student.setAddress(address);
+		}
+		
+		if(avatar != null) {
+			String fileName = saveFile(avatar);
+			String fileUrl = "http://localhost:3471/api/student/images/" + fileName;
+			student.setAvatar(fileUrl);
+		}
+		
+		if(class_id != null) {
+			ClassRoom classRoom = classRoomRepository.findById(class_id).orElse(null);
+			if(classRoom != null)
+				student.setClassroom(classRoom);
+		}
+		
+		return new StudentDTO(studentRepository.save(student));
+	}
+	
+	public StudentDTO convert(UUID id, String name, String email, String description, int age, String address, MultipartFile avatar,
+			UUID class_id) {
+Student student = new Student();
+		
+		student.setId(id);
+		if(name != null && !name.trim().equals(""))
+		{
+			student.setName(name);
+		}
+		
+		if(email != null && isValidEmail(email))
+		{
+			student.setEmail(email);
+		}
+		
+		if(description != null && !description.trim().equals(""))
+		{
+			student.setDescription(description);
+		}
+		
+		if(age > 0)
+		{
+			student.setAge(age);
+		}
+		
+		if(address != null && !address.trim().equals(""))
+		{
+			student.setAddress(address);
+		}
+		
+		if(avatar != null) {
+			String fileName = saveFile(avatar);
+			String fileUrl = "http://localhost:3471/api/student/images/" + fileName;
+			student.setAvatar(fileUrl);
+		}
+		
+		if(class_id != null) {
+			ClassRoom classRoom = classRoomRepository.findById(class_id).orElse(null);
+			if(classRoom != null)
+				student.setClassroom(classRoom);
+		}
+		
+		return new StudentDTO(student);
 	}
 
 }

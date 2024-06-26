@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vanhai.TestAngular.DTO.SearchRequest;
 import com.vanhai.TestAngular.DTO.StudentDTO;
@@ -17,5 +18,7 @@ public interface StudentService {
 	public StudentDTO update(StudentDTO student);
 	
 	public boolean delelte(UUID id);
+	
+	public StudentDTO save(String name, String email, String description, int age, String address, MultipartFile avatar, UUID class_id);
 	
 }
