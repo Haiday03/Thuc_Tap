@@ -1,0 +1,65 @@
+<div class="container custom-container">
+  <button class="btn btn-outline-primary" (click)="open(content)">Create ClassRoom</button>
+  <table class="table mt-3">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Class Name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Establishment Date</th>
+        <th scope="col">
+          Manager
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let class of data; let i = index">
+        <td>{{ class.id }}</td>
+        <td>{{ class.className }}</td>
+        <td>{{ class.email }}</td>
+        <td>{{ class.establishmentDate | date }}</td> <!-- Sử dụng | date để hiển thị ngày tháng -->
+        <th scope="col">
+          <button type="button" class="btn btn-danger" (click)="openFormDeleteClass(content, class.id, class.className, class.email, class.establishmentDate)">Delete</button>
+          <button type="button" class="btn btn-warning m-1" (click)="openFormUpdateClass(content, class.id, class.className, class.email, class.establishmentDate)">Update</button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-center mt-3">
+    <button type="button" class="btn btn-custom" (click)="prePage()" [disabled]="currentPage === 0">Previous</button>
+    <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 *ngIf="action === 'Save'" class="modal-title" id="modal-basic-title">Create new ClassRoom</h4>
+    <h4 *ngIf="action === 'Delete'" class="modal-title" id="modal-basic-title">You sure you want to delete this class?</h4>
+    <h4 *ngIf="action === 'Update'" class="modal-title" id="modal-basic-title">Update classroom</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form #ngForm="ngForm">
+      <div class="mb-3">
+        <label for="className" class="form-label">Class Name</label>
+        <input type="text" [textContent]="classroom.className" class="form-control" id="className" required [(ngModel)]="classroom.className" name="className">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" [textContent]="classroom.email" class="form-control" id="email" required [(ngModel)]="classroom.email" name="email">
+      </div>
+      <div class="mb-3">
+        <label for="establishmentDate" class="form-label">Establishment Date</label>
+        <input type="date" [textContent]="classroom.establishmentDate" class="form-control" id="establishmentDate" required [(ngModel)]="classroom.establishmentDate" name="establishmentDate">
+      </div>
+      <!-- Các trường dữ liệu khác của ClassRoom -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button *ngIf="action === 'Save'" type="button" class="btn btn-primary" (click)="addClass()" [disabled]="!ngForm?.form?.valid">Save</button>
+    <button *ngIf="action === 'Delete'" type="button" class="btn btn-danger" (click)="deleteClass(classroom.id)">Delete</button>
+    <button *ngIf="action === 'Update'" type="button" class="btn btn-warning" (click)="updateClass()">Update</button>
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <!-- Sử dụng !ngForm?.form?.valid để đảm bảo rằng ngForm đã được khởi tạo và hợp lệ -->
+  </div>    
+</ng-template>

@@ -1,0 +1,45 @@
+.container {
+    padding: 20px;
+  }
+  
+  .student-card {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .image-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .image-container img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    max-width: 300px;
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .content h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .content p {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+  
+  .content strong {
+    font-weight: bold;
+  }
+  

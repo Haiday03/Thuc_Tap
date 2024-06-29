@@ -39,7 +39,7 @@ public class StudentController {
 	@Autowired
 	private StudentServiceImpl studentService;
 	
-	@GetMapping("/find-criteria")
+	@PostMapping("/find-criteria")
 	public ResponseEntity<Page<StudentDTO>> getStudents(@RequestBody SearchRequest searchRequest, @RequestParam("pageSize")int pageSize, @RequestParam("pageNumber")int pageNumber){
 		
 		Page<StudentDTO> res = studentService.findAllByCriteria(searchRequest, PageRequest.of(pageNumber, pageSize));

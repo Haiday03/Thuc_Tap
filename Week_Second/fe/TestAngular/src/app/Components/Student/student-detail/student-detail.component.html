@@ -1,0 +1,15 @@
+<div class="container" *ngIf="student">
+    <div class="student-card row" *ngFor="let s of student">
+      <div class="image-container col-lg-4">
+        <img [src]="s.avatar" [alt]="s.name">
+      </div>
+      <div class="content col-lg-8">
+        <h1>{{ s.name }}</h1>
+        <p><strong>Age:</strong> {{ s.age }}</p>
+        <p><strong>Email:</strong> {{ s.email }}</p>
+        <p><strong>Address:</strong> {{ s.address }}</p>
+        <p><strong>Description:</strong> {{ s.description }}</p>
+      </div>
+    </div>
+  </div>
+  
