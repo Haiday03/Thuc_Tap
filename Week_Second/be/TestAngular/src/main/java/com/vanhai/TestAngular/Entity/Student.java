@@ -47,6 +47,9 @@ public class Student {
 	private String address;
 	
 	private String avatar;
+	
+	@Column(name = "date_join")
+	private java.util.Date dateJoin;
 
 	@ManyToOne
 	@JoinColumn(name = "classroom_id")

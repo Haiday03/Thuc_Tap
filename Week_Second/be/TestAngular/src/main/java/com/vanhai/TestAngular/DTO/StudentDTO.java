@@ -1,5 +1,6 @@
 package com.vanhai.TestAngular.DTO;
 
+import java.sql.Date;
 import java.util.UUID;
 
 import com.vanhai.TestAngular.Entity.Student;
@@ -22,6 +23,7 @@ public class StudentDTO {
 	private int age;
 	private String address;
 	private String avatar;
+	private java.util.Date dateJoin;
 	private ClassRoomDTO classroom;
 	
 	public StudentDTO(Student entity) {
@@ -32,6 +34,8 @@ public class StudentDTO {
 		this.age = entity.getAge();
 		this.address = entity.getAddress();
 		this.avatar = entity.getAvatar();
+		this.dateJoin = entity.getDateJoin();
+		
 		if(entity.getClassroom() != null)
 			this.classroom = new ClassRoomDTO(entity.getClassroom());
 	}

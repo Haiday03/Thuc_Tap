@@ -1,5 +1,6 @@
 package com.vanhai.TestAngular.Entity;
 
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import java.util.UUID;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +28,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tbl_class")
-public class ClassRoom {
+public class ClassRoom implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -43,7 +45,12 @@ public class ClassRoom {
 	@Column(name = "establishment_date")
 	private Date establishmentDate;
 	
-	@OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER, cascade = {
+			CascadeType.DETACH,
+			CascadeType.MERGE,
+			CascadeType.PERSIST,
+			CascadeType.REFRESH
+	})
 	private Set<Student> students;
 }
 	

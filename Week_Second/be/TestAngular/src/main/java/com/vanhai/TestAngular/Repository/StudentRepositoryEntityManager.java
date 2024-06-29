@@ -58,7 +58,7 @@ public class StudentRepositoryEntityManager {
             map.put("address", "%" + searchRequest.getAddress() + "%");
         }
         
-        jpql.append("ORDER BY s.id DESC");
+        jpql.append("ORDER BY s.dateJoin DESC");
         TypedQuery<Student> query = entityManager.createQuery(jpql.toString(), Student.class);
         
         map.forEach(query::setParameter);

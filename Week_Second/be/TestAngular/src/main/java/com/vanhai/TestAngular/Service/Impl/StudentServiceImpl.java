@@ -2,6 +2,7 @@ package com.vanhai.TestAngular.Service.Impl;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -59,6 +60,8 @@ public class StudentServiceImpl implements StudentService{
 		newStudent.setAge(student.getAge());
 		newStudent.setAddress(student.getAddress());
 		newStudent.setAvatar(student.getAvatar());
+		newStudent.setDateJoin(new Date());
+		
 		if(student.getClassroom() != null) {
 			ClassRoom classRoom = classRoomRepository.findById(student.getClassroom().getId()).orElse(null);
 			if(classRoom != null)
@@ -172,6 +175,7 @@ public class StudentServiceImpl implements StudentService{
 				student.setClassroom(classRoom);
 		}
 		
+		student.setDateJoin(new Date());
 		return new StudentDTO(studentRepository.save(student));
 	}
 	

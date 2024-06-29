@@ -31,12 +31,11 @@ export class StudentComponent implements OnInit{
   listClass: ClassRoom[] = [];
   pageSizeClass: number = 0;
   @ViewChild('ngForm') ngForm: NgForm | undefined; // Khai báo ngForm như một ViewChild
-
+  test: number = 0;
 
   constructor(private studentService: StudentService,
     private classroomService: ClassroomService,
     private toastr: ToastrService,
-    // private studentDetail: StudentDetailComponent,
     private router : Router
   ){
   }
@@ -90,6 +89,7 @@ export class StudentComponent implements OnInit{
   openToAdd(content: TemplateRef<any>) {
     this.student = {};
     this.action = 'Add';
+    this.loadClassroom();
 		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result;
 	}
 
@@ -108,6 +108,7 @@ export class StudentComponent implements OnInit{
 
   //action
   addStudent() : void {
+    this.loadClassroom();
     if(this.ngForm?.form?.valid) {
       this.studentService.addStudent(this.convertToFormData())
       .then(() => {
