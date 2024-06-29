@@ -6,6 +6,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms'; // Đảm bảo đã import NgForm từ @angular/forms
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-classroom',
@@ -35,7 +36,8 @@ export class ClassroomComponent implements OnInit{
 
 
     constructor(private classService: ClassroomService, 
-      private toastr: ToastrService
+      private toastr: ToastrService,
+      private router: Router
     ){
 
     }
@@ -172,5 +174,10 @@ export class ClassroomComponent implements OnInit{
         default:
           return `with: ${reason}`;
       }
+    }
+
+    // See list student
+    openListStudent(id: string): void {
+      this.router.navigate(['class', id]);
     }
 }

@@ -1,0 +1,30 @@
+<div class="container" *ngIf="listStudent">
+    <div class="student-card row" *ngFor="let s of listStudent">
+      <div class="image-container col-lg-4">
+        <img [src]="s.avatar" [alt]="s.name">
+      </div>
+      <div class="content col-lg-6">
+        <h1>{{ s.name }}</h1>
+        <p><strong>Age:</strong> {{ s.age }}</p>
+        <p><strong>Email:</strong> {{ s.email }}</p>
+        <p><strong>Address:</strong> {{ s.address }}</p>
+        <p><strong>Description:</strong> {{ s.description }}</p>
+      </div>
+      <div class="remove col-lg-2 d-flex justify-content-center">
+        <button class="btn btn-danger" style="height: 40px;" (click)="open(content, s.id!)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">You sure you want to delete student?</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="removeStudent()">Delete</button>
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    </div>    
+  </ng-template>
+  
+  

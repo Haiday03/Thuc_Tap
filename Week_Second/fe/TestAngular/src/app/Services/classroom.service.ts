@@ -28,4 +28,12 @@ export class ClassroomService {
   delelteClass(id: string): Observable<Boolean>{
     return this.http.delete<Boolean>(`${this.classApi}/delete/${id}`);
   }
+
+  findClassById(id: string): Observable<any>{
+    return this.http.get<any>(`${this.classApi}/${id}`);
+  }
+
+  removeStudent(id: string): Observable<any>{
+    return this.http.get<any>(`${this.classApi}/remove-student/${id}`);
+  }
 }

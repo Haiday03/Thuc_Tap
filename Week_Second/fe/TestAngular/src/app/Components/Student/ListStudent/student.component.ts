@@ -88,6 +88,7 @@ export class StudentComponent implements OnInit{
   }
   // Open Modal 
   openToAdd(content: TemplateRef<any>) {
+    this.student = {};
     this.action = 'Add';
 		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result;
 	}

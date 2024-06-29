@@ -127,6 +127,7 @@
       <button *ngIf="action === 'Add'" type="button" class="btn btn-primary" (click)="addStudent()">Save</button>
       <button *ngIf="action === 'Update'" type="button" class="btn btn-warning" (click)="updateStudent()">Update</button>
       <button *ngIf="action === 'Delete'" type="button" class="btn btn-danger" (click)="deleteStudent()">Delete</button>
+      <button type="button" class="btn" (click)="modal.dismiss('Cancel')">Cancel</button>
     </div>
   </ng-template>
   
