@@ -75,6 +75,12 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 	public boolean delete(UUID id) {
 		// TODO Auto-generated method stub
 		ClassRoom oldClass = classRoomRepository.findById(id).orElse(null);
+		List<Student> li = studentRepository.findByClassRoomId(id);
+		li.stream().map(x -> {
+			x.setClassroom(null);
+			return x;
+		}
+		).forEach(y -> studentRepository.save(y));
 		
 		if(oldClass == null)
 			return false;

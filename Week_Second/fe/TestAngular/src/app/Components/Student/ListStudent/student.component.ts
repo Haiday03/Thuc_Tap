@@ -8,7 +8,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClassRoom } from '../../../Entity/ClassRoom';
 import { ClassroomService } from '../../../Services/classroom.service';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
-import { StudentDetailComponent } from '../student-detail/student-detail.component';
 import { Router } from '@angular/router';
 
 @Component({

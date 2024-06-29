@@ -45,12 +45,7 @@ public class ClassRoom implements Serializable{
 	@Column(name = "establishment_date")
 	private Date establishmentDate;
 	
-	@OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER, cascade = {
-			CascadeType.DETACH,
-			CascadeType.MERGE,
-			CascadeType.PERSIST,
-			CascadeType.REFRESH
-	})
+	@OneToMany(mappedBy = "classroom", fetch = FetchType.EAGER)
 	private Set<Student> students;
 }
 	
