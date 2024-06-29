@@ -43,6 +43,10 @@ export class StudentComponent implements OnInit{
 
   ngOnInit(){
     this.loadPage(this.currentPage);
+    this.loadClassroom();
+  }
+
+  loadClassroom() : void{
     this.classroomService.getClass(1, 0).subscribe(data => {
       this.pageSizeClass = data.totalPages;
     });
@@ -89,6 +93,7 @@ export class StudentComponent implements OnInit{
 	}
 
   openToUpdate(content: TemplateRef<any>, s : Student) {
+    this.loadClassroom();
     this.action = 'Update';
     this.student = s;
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result;
@@ -112,6 +117,7 @@ export class StudentComponent implements OnInit{
         this.loadPage(0);
       });
     }
+    this.student = {};
   }
 
   updateStudent(): void {
@@ -140,6 +146,8 @@ export class StudentComponent implements OnInit{
         this.toastr.error('Error', 'Error Delete');
         this.loadPage(0);
       });
+      this.modalService.dismissAll();
+      this.student = {};
     }
 
     this.modalService.dismissAll();
@@ -195,7 +203,6 @@ export class StudentComponent implements OnInit{
 
   // watch detail for student
   openDetailStudent(id: string): void {
-    // this.studentDetail.setId(id);
     this.router.navigate(['student-detail', id]);
   } 
 

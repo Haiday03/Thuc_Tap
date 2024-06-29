@@ -66,16 +66,15 @@ export class ClassroomComponent implements OnInit{
       if (this.ngForm?.form?.valid) {
         this.classService.addClass(this.classroom).subscribe({
           next: () => {
-            this.test = 0;
+            this.loadPage(0);
             this.toastr.success('ClassRoom add successfully!', 'Success');
           },error: () => {
-            this.test = 1;
+            this.loadPage(0);
             this.toastr.error('ClassRoom add fail!', 'Error');
         }});
       } else {
         this.toastr.error('Form is invalid', 'Error');
       }
-      this.loadPage(0);
     }
 
     updateClass(): void{

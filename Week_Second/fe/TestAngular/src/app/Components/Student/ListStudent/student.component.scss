@@ -50,3 +50,20 @@ $button-disabled-color: #6c757d;
     }
   }
 }
+
+.card {
+  &:hover .delete-student{
+    display: block;
+  }
+  .delete-student {
+    display: none;
+    position:absolute;
+    top: 0px;
+    right: 0px;
+    background-color: rosybrown;
+
+    &:hover {
+      background-color: red;
+    }
+  }
+}

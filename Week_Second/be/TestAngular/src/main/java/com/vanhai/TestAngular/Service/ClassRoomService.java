@@ -17,4 +17,8 @@ public interface ClassRoomService {
 	public ClassRoomDTO update(ClassRoomDTO classRoom);
 	
 	public boolean delete(UUID id);
+	
+	public ClassRoomDTO findById(UUID id);
+	
+	public Boolean removeStudentInClass(UUID studentId);
 }

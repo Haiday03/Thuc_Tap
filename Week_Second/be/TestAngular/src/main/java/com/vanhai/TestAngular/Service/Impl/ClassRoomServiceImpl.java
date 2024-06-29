@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.vanhai.TestAngular.DTO.ClassRoomDTO;
 import com.vanhai.TestAngular.DTO.StudentDTO;
 import com.vanhai.TestAngular.Entity.ClassRoom;
+import com.vanhai.TestAngular.Entity.Student;
 import com.vanhai.TestAngular.Repository.ClassRoomRepository;
+import com.vanhai.TestAngular.Repository.StudentRepository;
 import com.vanhai.TestAngular.Service.ClassRoomService;
 
 @Service
@@ -20,6 +22,9 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 
 	@Autowired
 	private ClassRoomRepository classRoomRepository;
+	
+	@Autowired
+	private StudentRepository studentRepository;
 		
 	@Override
 	public org.springframework.data.domain.Page<ClassRoomDTO> findAll(Pageable pageable) {
@@ -74,6 +79,32 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 		if(oldClass == null)
 			return false;
 		classRoomRepository.delete(oldClass);
+		return true;
+	}
+
+	@Override
+	public ClassRoomDTO findById(UUID id) {
+		// TODO Auto-generated method stub
+		ClassRoom classRoom = classRoomRepository.findById(id).orElse(null);
+		if(classRoom == null)
+			return null;
+			
+		ClassRoomDTO res = new ClassRoomDTO(classRoom);
+		res.setStudents(classRoom.getStudents().stream().map(StudentDTO::new).collect(Collectors.toSet()));
+		
+		return res;
+	}
+
+	@Override
+	public Boolean removeStudentInClass(UUID studentId) {
+		// TODO Auto-generated method stub
+		Student student = studentRepository.findById(studentId).orElse(null);
+		
+		if(student == null || student.getClassroom() == null)
+			return false;
+		
+		student.setClassroom(null);
+		studentRepository.saveAndFlush(student);
 		return true;
 	}
 

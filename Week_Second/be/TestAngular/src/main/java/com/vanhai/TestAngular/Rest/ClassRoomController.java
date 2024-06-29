@@ -60,4 +60,19 @@ public class ClassRoomController {
 		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 	}
 	
+	@GetMapping("/{id}")
+	public ResponseEntity<ClassRoomDTO> findById(@PathVariable("id")UUID id){
+		ClassRoomDTO res = classRoomService.findById(id);
+		if(res == null)
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ClassRoomDTO>(res, HttpStatus.OK);
+	}
+	
+	@GetMapping("/remove-student/{id}")
+	public ResponseEntity<Boolean> removeStudentInClassRoom(@PathVariable("id")UUID studentId){
+		if(classRoomService.removeStudentInClass(studentId))
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+	}
+	
 }
