@@ -75,4 +75,13 @@ public class ClassRoomController {
 		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 	}
 	
+	@PutMapping("/add-student")
+	public ResponseEntity<Boolean> addStudentToClass(@RequestParam("student_id") UUID studentId, @RequestParam("class_id") UUID classId) {
+	    if (classRoomService.addStudentToClass(studentId, classId)) {
+	        return new ResponseEntity<>(true, HttpStatus.OK);
+	    }
+	    return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+	}
+
+	
 }

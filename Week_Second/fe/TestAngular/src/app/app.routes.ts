@@ -3,6 +3,7 @@ import { StudentComponent } from './Components/Student/ListStudent/student.compo
 import { ClassroomComponent } from './Components/ClassRoom/ListClassroom/classroom.component';
 import { StudentDetailComponent } from './Components/Student/student-detail/student-detail.component';
 import { ListStudentComponent } from './Components/ClassRoom/list-student/list-student.component';
+import { AddStudentToClassComponent } from './Components/ClassRoom/add-student-to-class/add-student-to-class.component';
 
 export const routes: Routes = [{
     path: '', component: StudentComponent
@@ -12,5 +13,7 @@ export const routes: Routes = [{
     path: 'student-detail/:id', component: StudentDetailComponent
 }, {
     path: 'class/:id', component: ListStudentComponent
+},{
+    path: 'list-student', component: AddStudentToClassComponent
 }
 ];

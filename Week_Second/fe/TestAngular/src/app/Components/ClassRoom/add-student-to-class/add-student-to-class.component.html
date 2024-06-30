@@ -1,0 +1,83 @@
+<div class="container">
+    <div class="header d-flex row">
+        <div class="col-lg-3">
+            <input
+                mdbInput
+                type="text"
+                class="form-control"
+                id="search-input"
+                placeholder="search by name"
+                (keyup)="searchByName($event)"
+                />
+          </div>
+          <div class="col-lg-1">
+            <input
+                mdbInput
+                type="text"
+                class="form-control"
+                id="search-input"
+                placeholder="age"
+                (keyup)="searchByAge($event)"
+                />
+          </div>
+          <div class="col-lg-2">
+            <input
+                mdbInput
+                type="text"
+                class="form-control"
+                id="search-input"
+                placeholder="search by email"
+                (keyup)="searchByEmail($event)"
+                />
+          </div>
+          <div class="col-lg-4">
+            <input
+                mdbInput
+                type="text"
+                class="form-control"
+                id="search-input"
+                placeholder="search by id"
+                (keyup)="searchById($event)"
+                />
+          </div>
+          <div class="col-lg-2">
+            <input
+                mdbInput
+                type="text"
+                class="form-control"
+                id="search-input"
+                placeholder="search by address"
+                (keyup)="searchByAddress($event)"
+                />
+          </div>
+    </div>
+    <div class="body mt-3">
+        <table class="table table-bodered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let s of listStudent">
+                    <td>{{ s.id }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.age }}</td>
+                    <td>{{ s.email }}</td>
+                    <td>{{ s.address }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" (click)="addStudentToClass(s.id!)">Add</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        
+    </div>
+</div>

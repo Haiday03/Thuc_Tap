@@ -114,4 +114,18 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 		return true;
 	}
 
+	@Override
+	public Boolean addStudentToClass(UUID student_id, UUID class_id) {
+		// TODO Auto-generated method stub
+		Student student = studentRepository.findById(student_id).orElse(null);
+		ClassRoom class1 = classRoomRepository.findById(class_id).orElse(null);
+		
+		if(student == null || class1 == null || student.getClassroom().equals(class1))
+			return false;
+		
+		student.setClassroom(class1);
+		studentRepository.saveAndFlush(student);
+		return true;
+	}
+
 }

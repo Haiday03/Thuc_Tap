@@ -1,4 +1,7 @@
 <div class="container" *ngIf="listStudent">
+  <div class="header">
+    <button type="button" class="btn btn-primary mb-3"  (click)="openListStudent()">Add student to class</button>
+  </div>
     <div class="student-card row" *ngFor="let s of listStudent">
       <div class="image-container col-lg-4">
         <img [src]="s.avatar" [alt]="s.name">

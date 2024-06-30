@@ -2,7 +2,7 @@ import { Component, inject, OnInit, TemplateRef } from '@angular/core';
 import { Student } from '../../../Entity/Student';
 import { ClassroomService } from '../../../Services/classroom.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -22,7 +22,8 @@ export class ListStudentComponent implements OnInit{
 
   constructor(private classService: ClassroomService,
     private route : ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ){
 
   }
@@ -57,5 +58,10 @@ export class ListStudentComponent implements OnInit{
   open(content: TemplateRef<any>, id: string): void {
     this.student_id = id;
     this.modalService.open(content);
+  }
+
+  openListStudent(): void {
+    this.classService.setClassId(this.class_id!);
+    this.router.navigate(['list-student']);
   }
 }
