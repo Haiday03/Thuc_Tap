@@ -42,7 +42,7 @@ export class StudentDetailComponent implements OnInit{
   }
 
   loadPage(){
-    this.studentService.getListStudents(this.searchRequest, 1, 0)
+    this.studentService.getListStudents(this.searchRequest, 1, 1)
     .then(data => {
       this.student = data.content;
     }).catch(err => {

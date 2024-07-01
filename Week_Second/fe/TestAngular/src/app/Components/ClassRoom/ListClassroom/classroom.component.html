@@ -13,7 +13,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let class of data; let i = index">
+      <tr *ngFor="let class of data | paginate: {itemsPerPage: pageSize, currentPage: currentPage, totalItems: totalElements}">
         <td>{{ class.id }}</td>
         <td>{{ class.className }}</td>
         <td>{{ class.email }}</td>
@@ -27,8 +27,9 @@
     </tbody>
   </table>
   <div class="d-flex justify-content-center mt-3">
-    <button type="button" class="btn btn-custom" (click)="prePage()" [disabled]="currentPage === 0">Previous</button>
-    <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button>
+    <!-- <button type="button" class="btn btn-custom" (click)="prePage()" [disabled]="currentPage === 0">Previous</button>
+    <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button> -->
+    <pagination-controls (pageChange)="onChagnPage($event)"></pagination-controls>
   </div>
 </div>
 

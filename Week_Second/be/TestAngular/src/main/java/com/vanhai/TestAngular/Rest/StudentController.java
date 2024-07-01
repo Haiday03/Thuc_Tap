@@ -42,20 +42,20 @@ public class StudentController {
 	@PostMapping("/find-criteria")
 	public ResponseEntity<Page<StudentDTO>> getStudents(@RequestBody SearchRequest searchRequest, @RequestParam("pageSize")int pageSize, @RequestParam("pageNumber")int pageNumber){
 		
-		Page<StudentDTO> res = studentService.findAllByCriteria(searchRequest, PageRequest.of(pageNumber, pageSize));
+		Page<StudentDTO> res = studentService.findAllByCriteria(searchRequest, PageRequest.of(pageNumber - 1, pageSize));
 		if(res == null || res.isEmpty())
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Page<StudentDTO>>(res, HttpStatus.OK);
 	}
 	
 	@PostMapping("/save")
-	public ResponseEntity<StudentDTO> saveStudent(@RequestParam("name")String name,
-												@RequestParam("email")String email,
-												@RequestParam("description")String description,
-												@RequestParam("age") int age,
-												@RequestParam("address")String address,
-												@RequestParam("avatar") MultipartFile file,
-												@RequestParam("class_id") UUID class_id
+	public ResponseEntity<StudentDTO> saveStudent(@RequestParam(value = "name", required = true)String name,
+												@RequestParam(value = "email", required = true)String email,
+												@RequestParam(value = "description", required = false)String description,
+												@RequestParam(value = "age", required = false) Integer age,
+												@RequestParam(value = "address", required = false)String address,
+												@RequestParam(value = "avatar", required = false) MultipartFile file,
+												@RequestParam(value = "class_id", required = false) UUID class_id
 													){
 		StudentDTO newStudent = studentService.save(name, email, description, age, address, file, class_id);
 		if(newStudent == null)
@@ -65,13 +65,13 @@ public class StudentController {
 	
 	@PutMapping("/update")
 	public ResponseEntity<StudentDTO> updateStudent(@RequestParam("id")UUID id,
-												@RequestParam("name")String name,
-												@RequestParam("email")String email,
-												@RequestParam("description")String description,
-												@RequestParam("age") int age,
-												@RequestParam("address")String address,
-												@RequestParam("avatar") MultipartFile file,
-												@RequestParam("class_id") UUID class_id
+													@RequestParam(value = "name", required = true)String name,
+													@RequestParam(value = "email", required = true)String email,
+													@RequestParam(value = "description", required = false)String description,
+													@RequestParam(value = "age", required = false) Integer age,
+													@RequestParam(value = "address", required = false)String address,
+													@RequestParam(value = "avatar", required = false) MultipartFile file,
+													@RequestParam(value = "class_id", required = false) UUID class_id
 													){
 		StudentDTO newStudent = studentService.convert(id, name, email, description, age, address, file, class_id);
 		StudentDTO oldStudent = studentService.update(newStudent);
@@ -105,5 +105,12 @@ public class StudentController {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
 		}
+	}
+	
+	@GetMapping("/check-email/{email}")
+	public ResponseEntity<Boolean> checkEmail(@PathVariable String email){
+		if(studentService.checkEmailExists(email))
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 	}
 }

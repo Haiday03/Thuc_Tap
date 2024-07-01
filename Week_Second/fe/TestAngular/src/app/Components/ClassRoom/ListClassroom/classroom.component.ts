@@ -7,21 +7,23 @@ import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms'; // Đảm bảo đã import NgForm từ @angular/forms
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-classroom',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastrModule],
+  imports: [CommonModule, FormsModule, ToastrModule, NgxPaginationModule],
   templateUrl: './classroom.component.html',
   styleUrl: './classroom.component.scss',
   providers: []
 })
 export class ClassroomComponent implements OnInit{
   
-  data: ClassRoom[] = [];
-  currentPage: number = 0;
+  data!: ClassRoom[];
+  currentPage: number = 1;
   pageSize: number = 8;
   totalPages: number = 0;
+  totalElements: number = 0;
   private modalService = inject(NgbModal);
   closeResult = '';
   classroom: ClassRoom = {
@@ -51,18 +53,24 @@ export class ClassroomComponent implements OnInit{
         this.data = data.content;
         this.totalPages = data.totalPages;
         this.currentPage = page;
+        this.totalElements = data.totalElements;
       })
     }
 
-    nextPage(): void {
-      if(this.currentPage <= this.totalPages - 1) 
-        this.loadPage(this.currentPage + 1);
+    onChagnPage(page: number): void {
+      this.loadPage(page);
+      this.currentPage = page;
     }
+    
+    // nextPage(): void {
+    //   if(this.currentPage <= this.totalPages - 1) 
+    //     this.loadPage(this.currentPage + 1);
+    // }
 
-    prePage(): void {
-      if(this.currentPage !== 0)
-        this.loadPage(this.currentPage - 1);
-    }
+    // prePage(): void {
+    //   if(this.currentPage !== 0)
+    //     this.loadPage(this.currentPage - 1);
+    // }
 
     addClass(): void {
       if (this.ngForm?.form?.valid) {

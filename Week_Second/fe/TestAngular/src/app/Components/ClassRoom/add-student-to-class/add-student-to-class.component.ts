@@ -6,22 +6,25 @@ import { ToastrService } from 'ngx-toastr';
 import { SearchRequest } from '../../../Entity/SearchRequest';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-add-student-to-class',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgxPaginationModule],
   templateUrl: './add-student-to-class.component.html',
   styleUrl: './add-student-to-class.component.scss'
 })
 export class AddStudentToClassComponent implements OnInit{
 
   classId?: string;
-  listStudent?: Student[];
+  listStudent: Student[] = [];
   searchRequest!: SearchRequest;
   pageSize: number = 8;
   totalPages!: number;
-  currentPage: number = 0;
+  totalElements!: number;
+  currentPage: number = 1;
+  checkName: boolean = false;
 
   constructor(private classRoomService: ClassroomService,
     private studentService: StudentService,
@@ -33,9 +36,7 @@ export class AddStudentToClassComponent implements OnInit{
 
   ngOnInit(): void {
     this.classRoomService.currentId.subscribe(data => this.classId = data); 
-    this.loadPage(0);  
-    console.log(this.classId);
-     
+    this.loadPage(1);       
   }
 
   addStudentToClass(studentId: string): void {
@@ -60,6 +61,7 @@ export class AddStudentToClassComponent implements OnInit{
         this.listStudent = data.content;
         this.totalPages = data.totalPages;
         this.currentPage = page;
+        this.totalElements = data.totalElements;
   })
     .catch(err => {
       this.listStudent = [];
@@ -67,45 +69,50 @@ export class AddStudentToClassComponent implements OnInit{
     });
   }
 
-  nextPage(): void{
-    if(this.currentPage <= this.totalPages - 1)
-      this.loadPage(this.currentPage + 1);
+  onChangPage(page: number): void {
+    this.loadPage(page);
+    this.currentPage = page;
   }
 
-  prevPage(): void{
-    if(this.currentPage !== 0)
-      this.loadPage(this.currentPage - 1);
-  }
+  // nextPage(): void{
+  //   if(this.currentPage <= this.totalPages - 1)
+  //     this.loadPage(this.currentPage + 1);
+  // }
+
+  // prevPage(): void{
+  //   if(this.currentPage !== 0)
+  //     this.loadPage(this.currentPage - 1);
+  // }
 
   //Search 
   searchByName(event: KeyboardEvent): void {
     const searchData = (event.target as HTMLInputElement).value;
     this.searchRequest.name = searchData;
-    this.loadPage(0);
+    this.loadPage(1);
   }
 
   searchByAge(event: KeyboardEvent): void {
     const searchData = (event.target as HTMLInputElement).value;
     this.searchRequest.age = Number.parseInt(searchData);
-    this.loadPage(0);
+    this.loadPage(1);
   }
 
   searchByEmail(event: KeyboardEvent): void {
     const searchData = (event.target as HTMLInputElement).value;
     this.searchRequest.email = searchData;
-    this.loadPage(0);
+    this.loadPage(1);
   }
 
   searchByAddress(event: KeyboardEvent): void {
     const searchData = (event.target as HTMLInputElement).value;
     this.searchRequest.address = searchData;
-    this.loadPage(0);
+    this.loadPage(1);
   }
 
   searchById(event: KeyboardEvent): void {
     const searchData = (event.target as HTMLInputElement).value;
     this.searchRequest.id = searchData;
-    this.loadPage(0);
+    this.loadPage(1);
   }
 
   // set pageSize
@@ -113,7 +120,7 @@ export class AddStudentToClassComponent implements OnInit{
     if(pageSize < 0)
       return;
     this.pageSize = pageSize;
-    this.loadPage(0);
+    this.loadPage(1);
   }
 
   onPageSize(event: any): void {

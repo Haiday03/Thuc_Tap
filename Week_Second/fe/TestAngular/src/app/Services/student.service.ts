@@ -38,10 +38,7 @@ export class StudentService {
     .catch(err => {throw err});
   }
 
-  getUrlImage(url: string){
-    return axios.get(url)
-    .then(response => response.data)
-    .catch(err => {throw err});
+  checExistsEmail(email: string){
+    return axios.get(`${this.studentApi}/check-email/${email}`);
   }
-
 }

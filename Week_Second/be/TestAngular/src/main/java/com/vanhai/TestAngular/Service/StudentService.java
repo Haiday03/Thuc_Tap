@@ -19,6 +19,9 @@ public interface StudentService {
 	
 	public boolean delelte(UUID id);
 	
-	public StudentDTO save(String name, String email, String description, int age, String address, MultipartFile avatar, UUID class_id);
+	public StudentDTO save(String name, String email, String description, Integer age, String address, MultipartFile avatar, UUID class_id);
 	
+	public boolean checkEmailExists(String email);
+	
+	public boolean deleteImages(String fileName);
 }

@@ -1,6 +1,7 @@
 package com.vanhai.TestAngular.Service.Impl;
 
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +86,11 @@ public class StudentServiceImpl implements StudentService{
 		oldStudent.setDescription(student.getDescription());
 		oldStudent.setAge(student.getAge());
 		oldStudent.setAddress(student.getAddress());
-		oldStudent.setAvatar(student.getAvatar());
+		if(student.getAvatar() != null) {
+			if(oldStudent.getAvatar() != null)
+				deleteImages(oldStudent.getAvatar());
+			oldStudent.setAvatar(student.getAvatar());
+		}
 		if(student.getClassroom() != null) {
 			ClassRoom classRoom = classRoomRepository.findById(student.getClassroom().getId()).orElse(null);
 			if(classRoom != null)
@@ -101,6 +106,10 @@ public class StudentServiceImpl implements StudentService{
 		Student oldStudent = studentRepository.findById(id).orElse(null);
 		if(oldStudent == null)
 			return false;
+		
+		if(oldStudent.getAvatar() != null)
+			deleteImages(oldStudent.getAvatar());
+		
 		studentRepository.delete(oldStudent);
 		return true;
 	}
@@ -133,7 +142,7 @@ public class StudentServiceImpl implements StudentService{
     }
     
 	@Override
-	public StudentDTO save(String name, String email, String description, int age, String address, MultipartFile avatar,
+	public StudentDTO save(String name, String email, String description, Integer age, String address, MultipartFile avatar,
 			UUID class_id) {
 		// TODO Auto-generated method stub
 		Student student = new Student();
@@ -146,14 +155,15 @@ public class StudentServiceImpl implements StudentService{
 		if(email != null && isValidEmail(email))
 		{
 			student.setEmail(email);
-		}
+		}else
+			return null;
 		
 		if(description != null && !description.trim().equals(""))
 		{
 			student.setDescription(description);
 		}
 		
-		if(age > 0)
+		if(age != null && age > 0)
 		{
 			student.setAge(age);
 		}
@@ -179,7 +189,8 @@ public class StudentServiceImpl implements StudentService{
 		return new StudentDTO(studentRepository.save(student));
 	}
 	
-	public StudentDTO convert(UUID id, String name, String email, String description, int age, String address, MultipartFile avatar,
+	@SuppressWarnings("null")
+	public StudentDTO convert(UUID id, String name, String email, String description, Integer age, String address, MultipartFile avatar,
 			UUID class_id) {
 Student student = new Student();
 		
@@ -199,10 +210,11 @@ Student student = new Student();
 			student.setDescription(description);
 		}
 		
-		if(age > 0)
+		if(age != null && age.intValue() > 0)
 		{
-			student.setAge(age);
-		}
+			student.setAge(age.intValue());
+		}else
+			student.setAge(0);
 		
 		if(address != null && !address.trim().equals(""))
 		{
@@ -222,6 +234,26 @@ Student student = new Student();
 		}
 		
 		return new StudentDTO(student);
+	}
+
+	@Override
+	public boolean checkEmailExists(String email) {
+		// TODO Auto-generated method stub
+		return studentRepository.existsByEmail(email);
+	}
+
+	@Override
+	public boolean deleteImages(String fileName) {
+		// TODO Auto-generated method stub
+		try {
+			Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName).normalize();
+			Files.deleteIfExists(filePath);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

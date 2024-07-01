@@ -64,7 +64,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let s of listStudent">
+                <tr *ngFor="let s of listStudent | paginate: {itemsPerPage: pageSize, currentPage: currentPage, totalItems: totalElements}">
                     <td>{{ s.id }}</td>
                     <td>{{ s.name }}</td>
                     <td>{{ s.age }}</td>
@@ -82,8 +82,9 @@
             Size:<input type="number" class="ms-2" style="border-radius:4px;width: 80px;" (change)="onPageSize($event)"/>
         </div>
         <div class="next-page d-flex col-lg-7">
-            <button type="button" class="btn btn-custom" (click)="prevPage()" [disabled]="currentPage === 0">Prev</button>
-            <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button>
+            <!-- <button type="button" class="btn btn-custom" (click)="prevPage()" [disabled]="currentPage === 0">Prev</button>
+            <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button> -->
+            <pagination-controls (pageChange)="onChangPage($event)"></pagination-controls>
         </div>
     </div>
 </div>

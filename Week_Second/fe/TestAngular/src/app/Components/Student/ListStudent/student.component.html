@@ -55,7 +55,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-2 col-md-4 col-sm-6 mb-3" *ngFor="let s of listStudent">
+        <div class="col-lg-2 col-md-4 col-sm-6 mb-3" *ngFor="let s of listStudent | paginate: {itemsPerPage: pageSize, currentPage: currentPage, totalItems: totalElements}">
         <div class="card d-flex flex-column h-100" style="width: 100%;">
           <button type="button" (click)="openToDelete(content, s)" class="delete-student">X</button>
           <img [src]="s.avatar" class="card-img-top" [alt]="s.name" style="width: 100%; height: 140px;" (click)="openDetailStudent(s.id!)">
@@ -69,15 +69,16 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-between align-items-center pagination-container">
-      <div class="size d-flex">
+    <div class="d-flex justify-content-between align-items-center row mt-3">
+      <div class="size d-flex col-lg-4">
         <div class="mt-1"><strong>Size: </strong></div>
         <div><input type="number" class="form-control page-input" (change)="onPageSize($event)"></div>
       </div>
-      <div class="button-group">
-          <button type="button" class="btn btn-custom" (click)="prevPage()" [disabled]="currentPage === 0">Prev</button>
-          <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button>
-      </div>
+      <div class="button-group col-lg-8 ">
+          <!-- <button type="button" class="btn btn-custom" (click)="prevPage()" [disabled]="currentPage === 0">Prev</button>
+          <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button> -->
+          <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+        </div>
     </div>
   </div>
 
@@ -93,11 +94,14 @@
       <form #ngForm="ngForm">
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
-          <input type="text" [textContent]="student.name" class="form-control" id="name" required [(ngModel)]="student.name" name="name">
+          <input type="text" [textContent]="student.name" (ngModelChange)="onChangeFieldName($event)" class="form-control" id="name" required [(ngModel)]="student.name" name="name">
+          <p style="color: red;" *ngIf="!checkName">The name is empty!</p>
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="text" [textContent]="student.email" class="form-control" id="email" required [(ngModel)]="student.email" name="email">
+          <input type="text" [textContent]="student.email" (keyup)="validEmail($event)" class="form-control" id="email" required [(ngModel)]="student.email" name="email">
+          <p style="color: red;" *ngIf="!testEmail || !checkEmptyEmail">The email is not in the correct format</p>
+          <p style="color: red;" *ngIf="existsEmail">Email already exists</p>
         </div>
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
@@ -105,11 +109,12 @@
         </div>
         <div class="mb-3">
           <label for="age" class="form-label">Age</label>
-          <input type="text" [textContent]="student.age" class="form-control" id="age" required [(ngModel)]="student.age" name="age">
+          <input type="number" [textContent]="student.age" (keyup)="checkValueAge($event)" class="form-control" id="age"  [(ngModel)]="student.age" name="age">
+          <p style="color: red;" *ngIf="!checkAge">Age not < 0</p>
         </div>
         <div class="mb-3">
           <label for="address" class="form-label">Address</label>
-          <input type="text" [textContent]="student.address" class="form-control" id="address" required [(ngModel)]="student.address" name="address">
+          <input type="text" [textContent]="student.address" class="form-control" id="address" [(ngModel)]="student.address" name="address">
         </div>
         <div class="mb-3">
           <label for="avatar" class="form-label">Avatar</label>

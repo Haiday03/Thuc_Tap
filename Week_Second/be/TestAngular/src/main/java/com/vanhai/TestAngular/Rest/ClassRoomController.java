@@ -31,7 +31,7 @@ public class ClassRoomController {
 	
 	@GetMapping("/find-all")
 	public ResponseEntity<Page<ClassRoomDTO>> getAllClassRoom(@RequestParam("pageSize")int pageSize, @RequestParam("pageNumber")int pageNumber){
-		Page<ClassRoomDTO> res = classRoomService.findAll(PageRequest.of(pageNumber, pageSize));
+		Page<ClassRoomDTO> res = classRoomService.findAll(PageRequest.of(pageNumber - 1, pageSize));
 		if(res == null || res.isEmpty())
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Page<ClassRoomDTO>>(res, HttpStatus.OK);
