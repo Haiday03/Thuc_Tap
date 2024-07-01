@@ -77,7 +77,13 @@
             </tbody>
         </table>
     </div>
-    <div class="footer">
-        
+    <div class="footer d-flex row">
+        <div class="size col-lg-5">
+            Size:<input type="number" class="ms-2" style="border-radius:4px;width: 80px;" (change)="onPageSize($event)"/>
+        </div>
+        <div class="next-page d-flex col-lg-7">
+            <button type="button" class="btn btn-custom" (click)="prevPage()" [disabled]="currentPage === 0">Prev</button>
+            <button type="button" class="btn btn-custom" (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next</button>
+        </div>
     </div>
 </div>

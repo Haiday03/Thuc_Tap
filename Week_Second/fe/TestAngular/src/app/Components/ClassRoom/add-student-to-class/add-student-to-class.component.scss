@@ -1,0 +1,38 @@
+// Các biến màu sắc
+$primary-color: #007bff;
+$primary-color-hover: #0056b3;
+$button-disabled-color: #6c757d;
+$button-shadow-color: rgba(0, 123, 255, 0.5);
+
+// Quy tắc CSS cho nút tùy chỉnh
+.btn-custom {
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 0 5px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: $primary-color-hover;
+    box-shadow: 0 8px 15px pink;
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background-color: $button-disabled-color;
+    cursor: not-allowed;
+  }
+}
+
+.custom-container {
+  padding: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
