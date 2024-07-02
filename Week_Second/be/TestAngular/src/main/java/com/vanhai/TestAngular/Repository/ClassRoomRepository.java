@@ -10,4 +10,5 @@ import com.vanhai.TestAngular.Entity.ClassRoom;
 @Repository
 public interface ClassRoomRepository extends JpaRepository<ClassRoom, UUID>{
 
+	boolean existsByEmail(String email);
 }

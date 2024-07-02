@@ -88,7 +88,7 @@ public class StudentServiceImpl implements StudentService{
 		oldStudent.setAddress(student.getAddress());
 		if(student.getAvatar() != null) {
 			if(oldStudent.getAvatar() != null)
-				deleteImages(oldStudent.getAvatar());
+				deleteImage(oldStudent.getAvatar());
 			oldStudent.setAvatar(student.getAvatar());
 		}
 		if(student.getClassroom() != null) {
@@ -108,7 +108,7 @@ public class StudentServiceImpl implements StudentService{
 			return false;
 		
 		if(oldStudent.getAvatar() != null)
-			deleteImages(oldStudent.getAvatar());
+			deleteImage(oldStudent.getAvatar());
 		
 		studentRepository.delete(oldStudent);
 		return true;
@@ -243,10 +243,10 @@ Student student = new Student();
 	}
 
 	@Override
-	public boolean deleteImages(String fileName) {
+	public boolean deleteImage(String fileName) {
 		// TODO Auto-generated method stub
 		try {
-			Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName).normalize();
+			Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName.substring(41)).normalize();
 			Files.deleteIfExists(filePath);
 			return true;
 		} catch (Exception e) {

@@ -8,11 +8,12 @@ import { NgForm } from '@angular/forms'; // Đảm bảo đã import NgForm từ
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgIconsModule } from '@ng-icons/core';
 
 @Component({
   selector: 'app-classroom',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastrModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, ToastrModule, NgxPaginationModule, NgIconsModule],
   templateUrl: './classroom.component.html',
   styleUrl: './classroom.component.scss',
   providers: []
@@ -35,7 +36,8 @@ export class ClassroomComponent implements OnInit{
   @ViewChild('ngForm') ngForm: NgForm | undefined; // Khai báo ngForm như một ViewChild
   test: Number = 1;
   action: string = 'Save';
-
+  testEmail: boolean = true;
+  existsEmail: boolean = false;
 
     constructor(private classService: ClassroomService, 
       private toastr: ToastrService,
@@ -76,10 +78,10 @@ export class ClassroomComponent implements OnInit{
       if (this.ngForm?.form?.valid) {
         this.classService.addClass(this.classroom).subscribe({
           next: () => {
-            this.loadPage(0);
+            this.loadPage(1);
             this.toastr.success('ClassRoom add successfully!', 'Success');
           },error: () => {
-            this.loadPage(0);
+            this.loadPage(1);
             this.toastr.error('ClassRoom add fail!', 'Error');
         }});
       } else {
@@ -103,14 +105,15 @@ export class ClassroomComponent implements OnInit{
       }
       this.convertDefaultClass();
       this.modalService.dismissAll();
-      this.loadPage(0);
+      this.loadPage(1);
     }
 
-    deleteClass(id: string): void {
-      this.classService.delelteClass(id).subscribe({
+    deleteClass(): void {
+      this.classService.delelteClass(this.classroom.id).subscribe({
         next: () => {
           this.test = 0;
           this.notification();
+          this.loadPage(1);
         },error: () => {
           this.test = 1;
           this.notification();
@@ -131,7 +134,7 @@ export class ClassroomComponent implements OnInit{
         this.toastr.success('ClassRoom deleted successfully!', 'Success');
       else
         this.toastr.error('ClassRoom deleted failed!', 'Error');
-      this.loadPage(0);
+      this.loadPage(1);
     }
 
 
@@ -148,12 +151,17 @@ export class ClassroomComponent implements OnInit{
       );
     }
 
-    openFormDeleteClass(content: TemplateRef<any>, id: string, className: string, email: string, establishmentDate: Date | null) : void{
-      this.action = 'Delete';
+    // openFormDeleteClass(content: TemplateRef<any>, id: string, className: string, email: string, establishmentDate: Date | null) : void{
+    //   this.action = 'Delete';
+    //   this.classroom.id = id;
+    //   this.classroom.className = className;
+    //   this.classroom.email = email;
+    //   this.classroom.establishmentDate = establishmentDate;
+    //   this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    // }
+
+    openFormDeleteClass(content: TemplateRef<any>, id: string) : void{
       this.classroom.id = id;
-      this.classroom.className = className;
-      this.classroom.email = email;
-      this.classroom.establishmentDate = establishmentDate;
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
     }
 
@@ -188,4 +196,35 @@ export class ClassroomComponent implements OnInit{
     openListStudent(id: string): void {
       this.router.navigate(['class', id]);
     }
+
+    //check valid
+  validEmail($event: any) : boolean{
+    const email = ($event.target as HTMLInputElement).value;
+    this.checkExistEmail();
+    if(email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)){
+      this.testEmail = true;
+      return true;
+    }
+    this.testEmail = false;
+    return false;
+  }
+
+  assignAll() : void {
+    this.testEmail = true;
+    this.existsEmail = false;
+  }
+
+   checkExistEmail() : boolean {
+    
+    try {
+      this.classService.checkEmail(this.classroom.email!).subscribe(() => {
+          this.existsEmail = true;
+      }, err => {
+        this.existsEmail = false;
+    });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

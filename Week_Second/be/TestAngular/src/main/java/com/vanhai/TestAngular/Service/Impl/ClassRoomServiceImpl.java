@@ -128,4 +128,11 @@ public class ClassRoomServiceImpl implements ClassRoomService{
 		return true;
 	}
 
+	@Override
+	public Boolean checkEmail(String email) {
+		// TODO Auto-generated method stub
+		
+		return this.classRoomRepository.existsByEmail(email);
+	}
+
 }

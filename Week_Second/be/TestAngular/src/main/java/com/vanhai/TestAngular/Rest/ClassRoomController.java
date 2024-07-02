@@ -83,5 +83,11 @@ public class ClassRoomController {
 	    return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
 	}
 
+	@GetMapping("/check-email")
+	public ResponseEntity<Boolean> checkEmail(@RequestParam("email")String email){
+		if(this.classRoomService.checkEmail(email))
+			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+	}
 	
 }

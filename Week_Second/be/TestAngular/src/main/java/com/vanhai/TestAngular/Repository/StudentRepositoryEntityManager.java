@@ -1,5 +1,7 @@
 package com.vanhai.TestAngular.Repository;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +58,12 @@ public class StudentRepositoryEntityManager {
         if (searchRequest.getAddress() != null) {
             jpql.append("AND s.address LIKE :address ");
             map.put("address", "%" + searchRequest.getAddress() + "%");
+        }
+        
+        if (searchRequest.getDateStart() != null) {
+            jpql.append("AND s.dateJoin BETWEEN :dateStart AND :dateEnd  ");
+            map.put("dateStart", searchRequest.getDateStart());
+            map.put("dateEnd", searchRequest.getDateEnd() != null ? searchRequest.getDateEnd() : Date.valueOf(LocalDate.now()));
         }
         
         jpql.append("ORDER BY s.dateJoin DESC");

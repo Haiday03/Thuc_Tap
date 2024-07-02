@@ -23,4 +23,6 @@ public interface ClassRoomService {
 	public Boolean removeStudentInClass(UUID studentId);
 	
 	public Boolean addStudentToClass(UUID student_id, UUID class_id);
+	
+	public Boolean checkEmail(String email);
 }

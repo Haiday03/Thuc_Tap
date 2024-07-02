@@ -52,6 +52,10 @@ export class ClassroomService {
     });
   }
 
+  checkEmail(email: string): Observable<Boolean>{
+    return this.http.get<Boolean>(`${this.classApi}/check-email?email=${email}`);
+  }
+
   convertToFormData(s: Student): FormData {
     const formData = new FormData();
 

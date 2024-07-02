@@ -4,4 +4,6 @@ export interface SearchRequest{
     email?: string;
     age?: number;
     address?: string;
+    dateStart?: Date;
+    dateEnd?: Date;
 }

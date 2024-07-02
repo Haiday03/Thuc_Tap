@@ -23,5 +23,5 @@ public interface StudentService {
 	
 	public boolean checkEmailExists(String email);
 	
-	public boolean deleteImages(String fileName);
+	public boolean deleteImage(String fileName);
 }

@@ -1,5 +1,6 @@
 package com.vanhai.TestAngular.DTO;
 
+import java.util.Date;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -20,4 +21,8 @@ public class SearchRequest {
 	private String address;
 	
 	private String className;
+	
+	private Date dateStart;
+	
+	private Date dateEnd;
 }
