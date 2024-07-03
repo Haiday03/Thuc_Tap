@@ -2,8 +2,8 @@
     <div class="header row">
       <div class="col-lg-1">
         <button class="btn btn-outline-primary mb-2" (click)="openToAdd(content)"> 
-            <ng-icon name="bootstrapPlus"></ng-icon>
-                      Add</button>
+            <ng-icon name="bootstrapPlus"></ng-icon>Add
+          </button>
       </div>
       <div class="col-lg-1">
         <input
@@ -110,7 +110,7 @@
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-      <form #ngForm="ngForm">
+      <form >
         <div class="mb-3">
           <label for="name" class="form-label">Name</label>
           <input type="text" [textContent]="student.name" (ngModelChange)="onChangeFieldName($event)" class="form-control" id="name" required [(ngModel)]="student.name" name="name">
@@ -136,13 +136,15 @@
           <input type="text" [textContent]="student.address" class="form-control" id="address" [(ngModel)]="student.address" name="address">
         </div>
         <div class="mb-3">
+          <img *ngIf="urlAvatar !== undefined" [src]="urlAvatar" [alt]="student.name" style="width: 44px;height: 44px;border-radius: 50%;">
           <label for="avatar" class="form-label">Avatar</label>
           <input type="file" [textContent]="student.avatar" (change)="onFileSelected($event)">
         </div>
         <div class="mb-3">
           <label for="classroom" class="form-label">Class room</label>
           <select type="text" class="form-control" id="classroom" required [(ngModel)]="student.classroom" name="classroom">
-            <option [ngValue]="null"  [selected]="true"><p style="color: rgb(224, 224, 224);">Choose classroom</p></option>
+            <option *ngIf="tempClassRoom !== undefined" [ngValue]="null" disabled  [selected]="true">{{ tempClassRoom.className}}</option>
+            <option *ngIf="tempClassRoom === undefined" [ngValue]="null" disabled [selected]="true">Choose classroom</option>
             <option *ngFor="let cl of listClass" [ngValue]="cl.id">{{ cl.className }}</option>
         </select>
         </div>

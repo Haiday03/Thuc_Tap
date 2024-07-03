@@ -1,7 +1,7 @@
   import { Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
   import { Student } from '../../../Entity/Student';
   import { StudentService } from '../../../Services/student.service';
-  import { FormsModule, NgForm } from '@angular/forms';
+  import { FormsModule } from '@angular/forms';
   import { SearchRequest } from '../../../Entity/SearchRequest';
   import { CommonModule } from '@angular/common';
   import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +11,6 @@
   import { Router } from '@angular/router';
   import { NgxPaginationModule } from 'ngx-pagination';
   import { NgIconComponent } from '@ng-icons/core';
-
 
   @Component({
     selector: 'app-student',
@@ -33,7 +32,6 @@
     private modalService = inject(NgbModal);
     listClass: ClassRoom[] = [];
     pageSizeClass: number = 0;
-    @ViewChild('ngForm') ngForm: NgForm | undefined; // Khai báo ngForm như một ViewChild
     test: number = 0;
     checkName: boolean = true;
     testEmail: boolean = true;
@@ -41,6 +39,8 @@
     checkEmptyEmail: boolean = true;
     checkAge: boolean = true;
     t: boolean = false;
+    tempClassRoom?: ClassRoom;
+    urlAvatar?: string;
 
     constructor(private studentService: StudentService,
       private classroomService: ClassroomService,
@@ -54,6 +54,12 @@
       this.loadClassroom();
     }
 
+    loadClassFindById(id: string): void {
+      this.classroomService.findClassById(id).subscribe(data => {
+        this.tempClassRoom = data;
+        console.log(this.tempClassRoom);
+      });
+    }
     loadClassroom() : void{
       this.classroomService.getClass(1, 1).subscribe(data => {
         this.pageSizeClass = data.totalPages;
@@ -101,8 +107,14 @@
 
     onFileSelected(event: any): void{
       const file: File = event.target.files[0];
-      if(file)
+      if(file){
         this.student.avatar = file;
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.urlAvatar = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
     }
     // Open Modal 
     openToAdd(content: TemplateRef<any>) {
@@ -114,10 +126,20 @@
     }
 
     openToUpdate(content: TemplateRef<any>, s : Student) {
+      this.tempClassRoom = undefined;
       this.assignAll();
       this.loadClassroom();
       this.action = 'Update';   
       this.student = s;
+      if(s.avatar !== undefined &&  s.avatar !== null) 
+      {
+          this.urlAvatar = s.avatar.toString();
+      }
+      if(s.classroom !== undefined && s.classroom !== null){
+        this.tempClassRoom = s.classroom;
+      }
+      console.log(this.tempClassRoom);
+      
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result;
     }
 
@@ -262,7 +284,7 @@
       formData.append('age', this.student.age?.toString() || '');
       formData.append('address', this.student.address || '');
       formData.append('avatar', this.student.avatar || '');
-      formData.append('class_id', this.student.classroom || '');
+      formData.append('class_id', this.student.classRoom || '');
 
       return formData;
     }

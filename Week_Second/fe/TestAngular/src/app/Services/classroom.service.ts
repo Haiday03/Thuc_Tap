@@ -66,7 +66,7 @@ export class ClassroomService {
     formData.append('age', s.age?.toString()!);
     formData.append('address', s.address!);
     formData.append('avatar', s.avatar!);
-    formData.append('class_id', s.classroom!);
+    formData.append('class_id', s.classRoom!);
 
     return formData;
   }

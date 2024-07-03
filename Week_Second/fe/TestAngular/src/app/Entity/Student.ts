@@ -8,5 +8,6 @@ export interface Student {
      age?: number;
      address?: string;
      avatar?: File;
-     classroom?: string;
+     classRoom?: string;
+     classroom?: ClassRoom;
 }
