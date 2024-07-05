@@ -4,6 +4,7 @@ import { environment } from '../enviroment/enviroment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ClassRoom } from '../Entity/ClassRoom';
 import { Student } from '../Entity/Student';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,34 +19,54 @@ export class ClassroomService {
     this.classId.next(classId);
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private httpService: HttpService) { }
 
   getClass(pageSize: number, pageNumber: number): Observable<any>{
-    return this.http.get(`${this.classApi}/find-all?pageSize=${pageSize}&pageNumber=${pageNumber}`);
+    var headers = this.httpService.createAuthorizationHeader();
+    return this.http.get(`${this.classApi}/find-all?pageSize=${pageSize}&pageNumber=${pageNumber}`, {
+      headers
+    });
   }
 
   addClass(classRoom: ClassRoom): Observable<ClassRoom>{
-    return this.http.post<ClassRoom>(`${this.classApi}/save`, classRoom);
+    var headers = this.httpService.createAuthorizationHeader();
+    return this.http.post<ClassRoom>(`${this.classApi}/save`, classRoom, {
+      headers
+    });
   }
 
   updateClass(classRoom: ClassRoom): Observable<ClassRoom>{
-    return this.http.put<ClassRoom>(`${this.classApi}/update`, classRoom);
+    var headers = this.httpService.createAuthorizationHeader();
+    return this.http.put<ClassRoom>(`${this.classApi}/update`, classRoom, {
+      headers
+    });
   }
 
   delelteClass(id: string): Observable<Boolean>{
-    return this.http.delete<Boolean>(`${this.classApi}/delete/${id}`);
+    var headers = this.httpService.createAuthorizationHeader();
+    return this.http.delete<Boolean>(`${this.classApi}/delete/${id}`, {
+      headers
+    });
   }
 
   findClassById(id: string): Observable<any>{
-    return this.http.get<any>(`${this.classApi}/${id}`);
+    var headers = this.httpService.createAuthorizationHeader();
+    return this.http.get<any>(`${this.classApi}/${id}`, {
+      headers
+    });
   }
 
   removeStudent(id: string): Observable<any>{
-    return this.http.get<any>(`${this.classApi}/remove-student/${id}`);
+    var headers = this.httpService.createAuthorizationHeader();
+    return this.http.get<any>(`${this.classApi}/remove-student/${id}`, {
+      headers
+    });
   }
 
   addStudentToClass(studentId: string, classId: string): Observable<Boolean>{
+    var headers = this.httpService.createAuthorizationHeader();
     return this.http.put<Boolean>(`${this.classApi}/add-student`, null, {
+      headers,
       params: new HttpParams()
       .set('student_id', studentId)
       .set('class_id', classId)
@@ -53,7 +74,10 @@ export class ClassroomService {
   }
 
   checkEmail(email: string): Observable<Boolean>{
-    return this.http.get<Boolean>(`${this.classApi}/check-email?email=${email}`);
+    var headers = this.httpService.createAuthorizationHeader();
+    return this.http.get<Boolean>(`${this.classApi}/check-email?email=${email}`, {
+      headers
+    });
   }
 
   convertToFormData(s: Student): FormData {

@@ -4,6 +4,8 @@ import axios from 'axios';
 import { SearchRequest } from '../Entity/SearchRequest';
 import { UUID } from 'crypto';
 import { Student } from '../Entity/Student';
+import { AuthService } from './auth.service';
+import { HttpService } from './http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,33 +14,42 @@ export class StudentService {
 
   private studentApi = `${environment.apiUrl}/student`;
 
-  constructor() { }
+  constructor(private http: HttpService) { }
 
   getListStudents(searchRequest: SearchRequest, pageSize: number, pageNumber: number) {
-    return axios.post(`${this.studentApi}/find-criteria?pageSize=${pageSize}&pageNumber=${pageNumber}`, searchRequest)
+    var headers = this.http.createAuthorizationHeader();
+    return axios.post(`${this.studentApi}/find-criteria?pageSize=${pageSize}&pageNumber=${pageNumber}`, searchRequest, {
+      headers
+    })
     .then(response => response.data)
     .catch(err => {throw err});
   }
 
   addStudent(stduentForm: FormData) {
-    return axios.post(`${this.studentApi}/save`, stduentForm)
+    var headers = this.http.createAuthorizationHeader();
+    return axios.post(`${this.studentApi}/save`, stduentForm, headers)
     .then(response => response.data)
     .catch(err => {throw err});
   }
 
   updateStudent(stduentForm: FormData) {
-    return axios.put(`${this.studentApi}/update`, stduentForm)
+    var headers = this.http.createAuthorizationHeader();
+    return axios.put(`${this.studentApi}/update`, stduentForm, {
+      headers
+    })
     .then(response => response.data)
     .catch(err => {throw err});
   }
 
   deleteStudent(id: string) : Promise<void> {
-    return axios.delete(`${this.studentApi}/delete/${id}`)
+    var headers = this.http.createAuthorizationHeader();
+    return axios.delete(`${this.studentApi}/delete/${id}`, headers)
     .then(response => response.data)
     .catch(err => {throw err});
   }
 
   checExistsEmail(email: string){
-    return axios.get(`${this.studentApi}/check-email/${email}`);
+    var headers = this.http.createAuthorizationHeader();
+    return axios.get(`${this.studentApi}/check-email/${email}`, headers);
   }
 }

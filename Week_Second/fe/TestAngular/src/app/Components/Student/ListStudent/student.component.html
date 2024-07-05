@@ -143,7 +143,7 @@
         <div class="mb-3">
           <label for="classroom" class="form-label">Class room</label>
           <select type="text" class="form-control" id="classroom" required [(ngModel)]="student.classroom" name="classroom">
-            <option *ngIf="tempClassRoom !== undefined" [ngValue]="null" disabled  [selected]="true">{{ tempClassRoom.className}}</option>
+            <option *ngIf="tempClassRoom !== undefined" [ngValue]="null"  [selected]="true">{{ tempClassRoom.className}}</option>
             <option *ngIf="tempClassRoom === undefined" [ngValue]="null" disabled [selected]="true">Choose classroom</option>
             <option *ngFor="let cl of listClass" [ngValue]="cl.id">{{ cl.className }}</option>
         </select>

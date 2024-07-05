@@ -8,7 +8,13 @@ import { provideToastr } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideIcons } from '@ng-icons/core';
 import * as bootstrapIcon from '@ng-icons/bootstrap-icons';
+import { config } from 'process';
+import { JwtHelperService, JwtModule } from "@auth0/angular-jwt";
+
+export function tokenGetter(){
+  return localStorage.getItem('token');
+}
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(), provideHttpClient(withFetch()), provideToastr(), provideAnimations(), provideIcons(bootstrapIcon)]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(), provideHttpClient(withFetch()), provideToastr(), provideAnimations(), provideIcons(bootstrapIcon),]
 };

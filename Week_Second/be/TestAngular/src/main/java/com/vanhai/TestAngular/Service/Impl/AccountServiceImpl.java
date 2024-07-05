@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vanhai.TestAngular.Config.JwtUtils;
+import com.vanhai.TestAngular.DTO.JwtView;
 import com.vanhai.TestAngular.Entity.Account;
 import com.vanhai.TestAngular.Repository.AccountRepository;
 import com.vanhai.TestAngular.Service.AccoutService;
@@ -29,14 +30,14 @@ public class AccountServiceImpl implements AccoutService{
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public String login(Account account) {
+	public JwtView login(Account account) {
 		// TODO Auto-generated method stub
 		
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(account.getUsername(), account.getPassword()));
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
-		return jwtUtils.generateToken(authentication);
+		return new JwtView(jwtUtils.generateToken(authentication));
 	}
 
 	@Override
